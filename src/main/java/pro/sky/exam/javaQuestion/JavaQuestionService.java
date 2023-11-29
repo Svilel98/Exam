@@ -1,17 +1,17 @@
 package pro.sky.exam.javaQuestion;
 
 import org.springframework.stereotype.Service;
-import pro.sky.exam.Question;
+import pro.sky.exam.question.Question;
+import pro.sky.exam.question.QuestionService;
 
 import java.util.*;
 
 @Service
-
 public class JavaQuestionService implements QuestionService {
-    private Set<Question> questions = new HashSet<>();
+    private JavaQuestionRepository javaQuestionRepository;
 
-    public JavaQuestionService(Set<Question> questions) {
-        this.questions = questions;
+    public JavaQuestionService(JavaQuestionRepository javaQuestionRepository) {
+        this.javaQuestionRepository = javaQuestionRepository;
     }
 
     public JavaQuestionService() {
@@ -21,38 +21,15 @@ public class JavaQuestionService implements QuestionService {
     @Override
     public Question add(String question, String answer) {
         Question questionNew = new Question(question, answer);
-        questions.add(questionNew);
+        javaQuestionRepository.add(questionNew);
         return questionNew;
     }
 
     @Override
-    public Question add(Question question) {
-        if (question == null){
-            throw new NullPointerException();
-        }
-        questions.add(question);
-        return question;
-    }
-
-    @Override
-    public Question remove(Question question) {
-        if (question == null){
-            throw new NullPointerException();
-        }
-        questions.remove(question);
-        return question;
-    }
-
-    @Override
-    public Collection<Question> getAll() {
-        return questions;
-    }
-
-    @Override
     public Question getRandomQuestion() {
-        List<Question> questionsList = new ArrayList<>(questions);
+        List<Question> questionsList = new ArrayList<>(javaQuestionRepository.getAll());
         Random randomQuestion = new Random();
-        int i = randomQuestion.nextInt(questions.size());
+        int i = randomQuestion.nextInt(questionsList.size());
         return questionsList.get(i);
     }
 }

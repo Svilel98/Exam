@@ -3,13 +3,10 @@ package pro.sky.exam;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import pro.sky.exam.exam.ExaminerServiceImpl;
+import pro.sky.exam.javaQuestion.JavaQuestionRepository;
 import pro.sky.exam.javaQuestion.JavaQuestionService;
-import pro.sky.exam.javaQuestion.QuestionService;
+import pro.sky.exam.question.Question;
 
 import java.util.*;
 
@@ -36,6 +33,7 @@ class ExamApplicationTests {
     private Question fifth;
     private Question questionNull;
     JavaQuestionService out = new JavaQuestionService();
+    JavaQuestionRepository outRepository = new JavaQuestionRepository();
 
     @BeforeEach
     public void setup() {
@@ -67,39 +65,39 @@ class ExamApplicationTests {
 
     @Test
     void addNull() {
-        Assertions.assertThrows(NullPointerException.class, () -> out.add(questionNull));
+        Assertions.assertThrows(NullPointerException.class, () -> outRepository.add(questionNull));
     }
 
     @Test
     void removeFromSet() {
-        out.add(first);
-        out.add(second);
-        out.remove(second);
+        outRepository.add(first);
+        outRepository.add(second);
+        outRepository.remove(second);
         Set<Question> expected = new HashSet<>(Set.of(first));
-        Collection actual = out.getAll();
+        Collection actual = outRepository.getAll();
         assertEquals(actual, expected);
     }
 
     @Test
     void remove() {
-        out.add(first);
-        out.add(second);
-        Question expected = out.remove(second);
+        outRepository.add(first);
+        outRepository.add(second);
+        Question expected = outRepository.remove(second);
         assertEquals(second, expected);
     }
     @Test
     void removeNull() {
-        Assertions.assertThrows(NullPointerException.class, () -> out.remove(questionNull));
+        Assertions.assertThrows(NullPointerException.class, () -> outRepository.remove(questionNull));
     }
 
     @Test
     void getAll() {
-        out.add(first);
-        out.add(second);
-        out.add(third);
-        assertEquals(out.getAll().size(), 3);
-        assertTrue(out.getAll().contains(first));
-        assertTrue(out.getAll().contains(second));
-        assertTrue(out.getAll().contains(third));
+        outRepository.add(first);
+        outRepository.add(second);
+        outRepository.add(third);
+        assertEquals(outRepository.getAll().size(), 3);
+        assertTrue(outRepository.getAll().contains(first));
+        assertTrue(outRepository.getAll().contains(second));
+        assertTrue(outRepository.getAll().contains(third));
     }
 }

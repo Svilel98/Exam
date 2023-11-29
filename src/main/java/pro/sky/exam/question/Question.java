@@ -1,4 +1,4 @@
-package pro.sky.exam;
+package pro.sky.exam.question;
 
 import java.util.Objects;
 

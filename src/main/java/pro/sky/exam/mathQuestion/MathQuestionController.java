@@ -1,4 +1,4 @@
-package pro.sky.exam.javaQuestion;
+package pro.sky.exam.mathQuestion;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,33 +9,31 @@ import pro.sky.exam.question.Question;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/exam/java")
-public class JavaQuestionController {
-    private final JavaQuestionService javaQuestionService;
+@RequestMapping("/exam/math")
+public class MathQuestionController {
+    private final MathQuestionService mathQuestionService;
+    private final MathQuestionRepository mathQuestionRepository;
 
-    private final JavaQuestionRepository javaQuestionRepository;
-
-    public JavaQuestionController(JavaQuestionService javaQuestionService, JavaQuestionRepository javaQuestionRepository) {
-        this.javaQuestionService = javaQuestionService;
-        this.javaQuestionRepository = javaQuestionRepository;
+    public MathQuestionController(MathQuestionService mathQuestionService, MathQuestionRepository mathQuestionRepository) {
+        this.mathQuestionService = mathQuestionService;
+        this.mathQuestionRepository = mathQuestionRepository;
     }
-
     @GetMapping(path = "/add", params = {"question", "answer"})
     public Question add(@RequestParam("question") String question,
                         @RequestParam("answer") String answer) {
-        return javaQuestionService.add(question, answer);
+        return mathQuestionService.add(question, answer);
     }
 
     @GetMapping(path = "/remove")
     public Question remove(@RequestParam("question") String question,
                            @RequestParam("answer") String answer) {
         Question fullQuestion = new Question(question, answer);
-        javaQuestionRepository.remove(fullQuestion);
+        mathQuestionRepository.remove(fullQuestion);
         return fullQuestion;
     }
 
     @GetMapping
     public Collection<Question> getAll() {
-        return javaQuestionRepository.getAll();
+        return mathQuestionRepository.getAll();
     }
 }

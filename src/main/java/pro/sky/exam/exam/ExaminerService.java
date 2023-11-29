@@ -1,6 +1,6 @@
 package pro.sky.exam.exam;
 
-import pro.sky.exam.Question;
+import pro.sky.exam.question.Question;
 
 import java.util.Collection;
 
