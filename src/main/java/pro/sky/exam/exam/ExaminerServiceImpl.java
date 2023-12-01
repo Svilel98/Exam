@@ -14,17 +14,13 @@ import java.util.Collection;
 public class ExaminerServiceImpl implements ExaminerService {
     private final QuestionService questionService;
 
-    private final QuestionRepository questionRepository;
-
-
-    public ExaminerServiceImpl(@Qualifier("mathQuestionService") QuestionService questionService, @Qualifier("mathQuestionRepository") QuestionRepository questionRepository) {
+    public ExaminerServiceImpl(@Qualifier("mathQuestionService") QuestionService questionService) {
         this.questionService = questionService;
-        this.questionRepository = questionRepository;
     }
 
     @Override
     public Collection<Question> getQuestions(int amount) throws ExceptionNumberOfQuestionsExceeded {
-        if (amount > questionRepository.getAll().size()) {
+        if (amount > questionService.getQuestionsSize()) {
             throw new ExceptionNumberOfQuestionsExceeded("Превышено количество допустимых вопросов");
         }
         if (amount <= 0) {

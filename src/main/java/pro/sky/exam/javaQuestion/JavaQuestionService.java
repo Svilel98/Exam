@@ -24,7 +24,11 @@ public class JavaQuestionService implements QuestionService {
         javaQuestionRepository.add(questionNew);
         return questionNew;
     }
-
+    @Override
+    public Integer getQuestionsSize(){
+        int size = javaQuestionRepository.getAll().size();
+        return size;
+    }
     @Override
     public Question getRandomQuestion() {
         List<Question> questionsList = new ArrayList<>(javaQuestionRepository.getAll());

@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import pro.sky.exam.javaQuestion.JavaQuestionRepository;
 import pro.sky.exam.javaQuestion.JavaQuestionService;
+import pro.sky.exam.mathQuestion.MathQuestionRepository;
+import pro.sky.exam.mathQuestion.MathQuestionService;
 import pro.sky.exam.question.Question;
 
 import java.util.*;
@@ -34,6 +36,8 @@ class ExamApplicationTests {
     private Question questionNull;
     JavaQuestionService out = new JavaQuestionService();
     JavaQuestionRepository outRepository = new JavaQuestionRepository();
+    MathQuestionService mathQuestionService = new MathQuestionService();
+    MathQuestionRepository mathQuestionRepository = new MathQuestionRepository();
 
     @BeforeEach
     public void setup() {
@@ -59,7 +63,7 @@ class ExamApplicationTests {
 
     @Test
     void add() {
-        Question actual = out.add(firstQuestion, firstAnswer);
+        Question actual = outRepository.add(first);
         assertEquals(actual, first);
     }
 
@@ -70,11 +74,11 @@ class ExamApplicationTests {
 
     @Test
     void removeFromSet() {
-        outRepository.add(first);
-        outRepository.add(second);
-        outRepository.remove(second);
+        mathQuestionRepository.add(first);
+        mathQuestionRepository.add(second);
+        mathQuestionRepository.remove(second);
         Set<Question> expected = new HashSet<>(Set.of(first));
-        Collection actual = outRepository.getAll();
+        Collection actual = mathQuestionRepository.getAll();
         assertEquals(actual, expected);
     }
 
@@ -92,12 +96,12 @@ class ExamApplicationTests {
 
     @Test
     void getAll() {
-        outRepository.add(first);
-        outRepository.add(second);
-        outRepository.add(third);
-        assertEquals(outRepository.getAll().size(), 3);
-        assertTrue(outRepository.getAll().contains(first));
-        assertTrue(outRepository.getAll().contains(second));
-        assertTrue(outRepository.getAll().contains(third));
+        mathQuestionRepository.add(first);
+        mathQuestionRepository.add(second);
+        mathQuestionRepository.add(third);
+        assertEquals(mathQuestionRepository.getAll().size(), 3);
+        assertTrue(mathQuestionRepository.getAll().contains(first));
+        assertTrue(mathQuestionRepository.getAll().contains(second));
+        assertTrue(mathQuestionRepository.getAll().contains(third));
     }
 }

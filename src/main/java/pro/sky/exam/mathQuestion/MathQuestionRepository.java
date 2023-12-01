@@ -7,12 +7,16 @@ import pro.sky.exam.question.QuestionRepository;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
 @Repository
 public class MathQuestionRepository implements QuestionRepository {
     private Set<Question> questions = new HashSet<>();
 
     public MathQuestionRepository(Set<Question> questions) {
         this.questions = questions;
+    }
+
+    public MathQuestionRepository() {
     }
 
     @Override

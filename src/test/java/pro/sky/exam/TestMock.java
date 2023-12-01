@@ -9,6 +9,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pro.sky.exam.exam.ExaminerServiceImpl;
 import pro.sky.exam.exception.ExceptionNumberOfQuestionsExceeded;
+import pro.sky.exam.javaQuestion.JavaQuestionService;
 import pro.sky.exam.mathQuestion.MathQuestionService;
 import pro.sky.exam.question.QuestionRepository;
 import pro.sky.exam.question.QuestionService;
@@ -16,6 +17,7 @@ import pro.sky.exam.question.Question;
 
 import java.util.Collection;
 import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
@@ -24,75 +26,73 @@ public class TestMock {
     private Question question = new Question("2+2", "= 4");
     private final int amount = 1;
     private final int negativeAmount = -5;
+    private int size = 10;
     @Mock
-    private QuestionService javaQuestionService;
+    private JavaQuestionService javaQuestionService;
     @Mock
     private MathQuestionService mathQuestionService;
     @Mock
     private QuestionRepository questionRepository;
-    private ExaminerServiceImpl out;
+    private ExaminerServiceImpl outJava;
     private ExaminerServiceImpl outMath;
 
     @BeforeEach
     public void BeforeEach() {
-        out = new ExaminerServiceImpl(javaQuestionService, questionRepository);
-        outMath = new ExaminerServiceImpl(mathQuestionService, questionRepository);
+        outJava = new ExaminerServiceImpl(javaQuestionService);
+        outMath = new ExaminerServiceImpl(mathQuestionService);
     }
 
 
     @Test
     void ExceptionNumberOfQuestionsExceeded() {
-        assertNotNull(javaQuestionService);
-        Mockito.when(questionRepository.getAll()).thenReturn(Set.of(question));
-        Assertions.assertThrows(ExceptionNumberOfQuestionsExceeded.class, () -> out.getQuestions(amount + 1));
+        assertNotNull(mathQuestionService);
+        Assertions.assertThrows(ExceptionNumberOfQuestionsExceeded.class, () -> outMath.getQuestions(mathQuestionService.getQuestionsSize()+1));
     }
 
     @Test
     void IllegalArgumentException() {
-        Mockito.when(questionRepository.getAll()).thenReturn(Set.of(question));
-        Assertions.assertThrows(IllegalArgumentException.class, () -> out.getQuestions(negativeAmount));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> outJava.getQuestions(negativeAmount));
     }
 
     @Test
     void methodWasExecutedOneTimes() {
-        Mockito.when(questionRepository.getAll()).thenReturn(Set.of(question));
-        Mockito.when(javaQuestionService.getRandomQuestion()).thenReturn(question);
-        out.getQuestions(1);
-        Mockito.verify(javaQuestionService, Mockito.times(1)).getRandomQuestion();
+        Mockito.when(mathQuestionService.getRandomQuestion()).thenReturn(question);
+        Mockito.when(mathQuestionService.getQuestionsSize()).thenReturn(size);
+        outMath.getQuestions(1);
+        Mockito.verify(mathQuestionService, Mockito.times(1)).getRandomQuestion();
     }
 
     @Test
     void correctedTest() {
-        Mockito.when(questionRepository.getAll()).thenReturn(Set.of(question));
         Mockito.when(javaQuestionService.getRandomQuestion()).thenReturn(question);
-        Collection<Question> actual = outMath.getQuestions(amount);
+        Mockito.when(javaQuestionService.getQuestionsSize()).thenReturn(size);
+        Collection<Question> actual = outJava.getQuestions(amount);
         Assertions.assertIterableEquals(Set.of(question), actual);
     }
+
     @Test
     void ExceptionNumberOfQuestionsExceededMath() {
         assertNotNull(javaQuestionService);
-        Mockito.when(questionRepository.getAll()).thenReturn(Set.of(question));
         Assertions.assertThrows(ExceptionNumberOfQuestionsExceeded.class, () -> outMath.getQuestions(amount + 1));
     }
 
     @Test
     void IllegalArgumentExceptionMath() {
-        Mockito.when(questionRepository.getAll()).thenReturn(Set.of(question));
         Assertions.assertThrows(IllegalArgumentException.class, () -> outMath.getQuestions(negativeAmount));
     }
 
     @Test
     void methodWasExecutedOneTimesMath() {
-        Mockito.when(questionRepository.getAll()).thenReturn(Set.of(question));
         Mockito.when(javaQuestionService.getRandomQuestion()).thenReturn(question);
-        outMath.getQuestions(1);
+        Mockito.when(javaQuestionService.getQuestionsSize()).thenReturn(size);
+        outJava.getQuestions(1);
         Mockito.verify(javaQuestionService, Mockito.times(1)).getRandomQuestion();
     }
 
     @Test
     void correctedTestMath() {
-        Mockito.when(questionRepository.getAll()).thenReturn(Set.of(question));
-        Mockito.when(javaQuestionService.getRandomQuestion()).thenReturn(question);
+        Mockito.when(mathQuestionService.getRandomQuestion()).thenReturn(question);
+        Mockito.when(mathQuestionService.getQuestionsSize()).thenReturn(size);
         Collection<Question> actual = outMath.getQuestions(amount);
         Assertions.assertIterableEquals(Set.of(question), actual);
     }
